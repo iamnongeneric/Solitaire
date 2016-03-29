@@ -3,10 +3,11 @@
   <head>
     <meta charset="utf-8">
     <title>Solitaire</title>
+    <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.6.1/lodash.min.js" defer></script>
     <script src="js/solitaire.js" defer></script>
     <script src="js/deckContainer.js" defer></script>
-
+    <script src="js/openedCardsContainer.js" defer></script>
     <script src="js/table.js" defer></script>
     <script src="js/app.js" defer></script>
   </head>
@@ -30,7 +31,7 @@
 
   <script type="text/template" id="opened_cards_template">
     <% cards.forEach(function (card) { %>
-      <div class="card"></div>
+      <div class="card" style="background: url(<%= card.image %>); background-size: 125px 175px;"></div>
     <% }); %>
   </script>
   </body>

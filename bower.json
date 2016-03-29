@@ -1,0 +1,22 @@
+{
+  "name": "Solitaire",
+  "homepage": "https://github.com/iamnongeneric/Solitaire",
+  "authors": [
+    "Vyacheslav Palamar <vyacheslav.palamar@gmail.com>"
+  ],
+  "description": "The Game",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "mocha": "^2.4.5",
+    "chai": "^3.5.0"
+  }
+}

@@ -128,6 +128,7 @@ var Solitaire = (function () {
     if (this.deck.length === 0) {
       this.deck = this.openedCards.slice();
       this.openedCards = [];
+      this.closeCards(this.deck);
     }
     else {
       var openCard = this.deck.pop();

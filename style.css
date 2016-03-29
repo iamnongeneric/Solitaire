@@ -1,0 +1,42 @@
+* {
+  margin: 0 auto;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+}
+
+.table_view {
+  width: 100%;
+  height: 100%;
+  background: #27ae60;
+}
+
+.deck_view, .opened_cards_view {
+  position: relative;
+  display: inline-block;
+  width: 125px;
+  height: 10px;
+  top: 10px;
+}
+
+.deck_view {
+  margin-left: 10px;
+}
+
+.opened_cards_view {
+  margin-left: 10px;
+}
+
+.card {
+  width: 125px;
+  height: 175px;
+  background-size: 125px 175px;
+  position: absolute;
+}
+
+.closed {
+  background: url(img/back.png);
+  background-size: 125px 175px;
+}

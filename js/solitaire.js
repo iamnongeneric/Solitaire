@@ -1,3 +1,5 @@
+"use strict";
+
 var Solitaire = (function () {
 
   var CARD_VALUES = ['Ace', 2, 3, 4, 5, 6, 7, 8, 9, 10, 'Jack', 'Queen', 'King'];
@@ -13,6 +15,8 @@ var Solitaire = (function () {
       clubs: [],
       spades: []
     };
+
+    this.openedCards = [];
 
     this.cells = {
       first: [],
@@ -35,7 +39,8 @@ var Solitaire = (function () {
           suit: SUITS[j],
           color: j > 1 ? 'black' : 'red',
           value: CARD_VALUES[i],
-          isOpen: false
+          isOpen: false,
+          image: "img/" + CARD_VALUES[i] + SUITS[j] + ".png"
         };
         this.deck.push(card);
       }
@@ -80,7 +85,6 @@ var Solitaire = (function () {
       winnableCaseCards.push(randomRedCard);
       winnableCaseCards.push(randomBlackCard);
     }
-    console.log(winnableCaseCards.length);
 
     //there are 26 cards now, but we still need any 5 cards
     var counter = 0;
@@ -91,34 +95,52 @@ var Solitaire = (function () {
         counter++;
       }
     }
-    console.log(winnableCaseCards.length);
+
     return winnableCaseCards;
   }
 
   Solitaire.prototype._generateDeal = function () {
     var winnableCaseCards = this._generateWinnableCase();
     var closedCards = this._decksDifference(this.deck, winnableCaseCards);
-    var cardsAmount = 1; //for first cell
+    var cardsPerCell = 1; //for first cell
 
     for (var cell in this.cells) {
-      for (var i = 0; i < cardsAmount - 1; i++) {
+      for (var i = 0; i < cardsPerCell - 1; i++) {
         var randomCardIndex = Math.floor(Math.random() * closedCards.length);
+        if (i > 0) {
+          closedCards[randomCardIndex].isOpen = true;
+        }
         this.cells[cell].push(closedCards[randomCardIndex]);
         closedCards.splice(randomCardIndex, 1);
       }
+
       var randomOpenCardIndex = Math.floor(Math.random() * winnableCaseCards.length);
       winnableCaseCards[randomOpenCardIndex].isOpen = true;
       this.cells[cell].push(winnableCaseCards[randomOpenCardIndex]);
       winnableCaseCards.splice(randomOpenCardIndex, 1);
-      cardsAmount++;
+      cardsPerCell++;
     }
 
     this.deck = this._shuffleDeck(winnableCaseCards);
   }
 
+  Solitaire.prototype.openCard = function () {
+    if (this.deck.length === 0) {
+      this.deck = this.openedCards.slice();
+      this.openedCards = [];
+    }
+    else {
+      var openCard = this.deck.pop();
+      openCard.isOpen = true;
+      this.openedCards.push(openCard);
+    }
+  }
+
+  Solitaire.prototype.closeCards = function (cards) {
+    cards.forEach(function (card) {
+      card.isOpen = false;
+    });
+  }
+
   return Solitaire;
 })();
-
-var s = new Solitaire();
-console.log(s.deck);
-console.log(s.cells);

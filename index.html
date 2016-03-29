@@ -8,6 +8,7 @@
     <script src="js/solitaire.js" defer></script>
     <script src="js/deckContainer.js" defer></script>
     <script src="js/openedCardsContainer.js" defer></script>
+    <script src="js/cellsContainer.js" defer></script>
     <script src="js/table.js" defer></script>
     <script src="js/app.js" defer></script>
   </head>
@@ -31,8 +32,23 @@
 
   <script type="text/template" id="opened_cards_template">
     <% cards.forEach(function (card) { %>
-      <div class="card" style="background: url(<%= card.image %>); background-size: 125px 175px;"></div>
+      <div class="card"><img src="<%= card.image %>"></div>
     <% }); %>
+  </script>
+
+  <script type="text/template" id="cells_template">
+    <% for (var cell in cells) { %>
+      <div class="column">
+        <% cells[cell].forEach(function (item) { %>
+          <% if (item.isOpen === true) { %>
+            <div class="card"><img src="<%= item.image %>"></div>
+          <% } %>
+          <% if (item.isOpen === false) { %>
+            <div class="card closed"></div>
+          <% } %>
+        <% }); %>
+      </div>
+    <% } %>
   </script>
   </body>
 </html>

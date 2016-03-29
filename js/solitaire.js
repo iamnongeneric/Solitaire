@@ -107,9 +107,6 @@ var Solitaire = (function () {
     for (var cell in this.cells) {
       for (var i = 0; i < cardsPerCell - 1; i++) {
         var randomCardIndex = Math.floor(Math.random() * closedCards.length);
-        if (i > 0) {
-          closedCards[randomCardIndex].isOpen = true;
-        }
         this.cells[cell].push(closedCards[randomCardIndex]);
         closedCards.splice(randomCardIndex, 1);
       }

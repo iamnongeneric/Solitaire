@@ -11,13 +11,14 @@ html, body {
   width: 100%;
   height: 100%;
   background: #27ae60;
+  position: relative;
 }
 
 .deck_view, .opened_cards_view {
   position: relative;
   display: inline-block;
-  width: 125px;
-  height: 175px;
+  width: 100px;
+  height: 145px;
   top: 10px;
 }
 
@@ -34,28 +35,39 @@ html, body {
   display: inline-block;
   float: left;
   width: 100%;
+  height: 60%;
   text-align: center;
-  top: 35%;
+  top: 39%;
 }
 
 .card {
-  width: 125px;
-  height: 175px;
+  width: 100px;
+  height: 145px;
   position: absolute;
 }
 
 .card > img {
-  width: 125px;
-  height: 175px;
+  width: 100px;
+  height: 145px;
 }
 
 .closed {
   background: url(img/back.png);
-  background-size: 125px 175px;
+  background-size: 100px 145px;
 }
 
 .column {
-  width: 125px;
-  height: 175px;
+  width: 100px;
+  height: 100%;
   display: inline-block;
+  position: relative;
+}
+
+.column > * {
+  float: left;
+  position: relative;
+}
+
+.column > .card:not(:first-child) {
+  margin-top: -125px;
 }

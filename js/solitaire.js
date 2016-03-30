@@ -70,7 +70,7 @@ var Solitaire = (function () {
   Solitaire.prototype._generateWinnableCase = function () {
     /*
     it's bad to generate a random deal, so we will use the special rule for
-    deal generation. Cards in house + first open cards must form a sequence of
+    deal generation. Cards in deck + first open cards must form a sequence of
     black and red cards.
     Also the amount of cards is 24 cards in deck  + 7 open cards.
     */

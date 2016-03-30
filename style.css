@@ -71,3 +71,7 @@ html, body {
 .column > .card:not(:first-child) {
   margin-top: -125px;
 }
+
+.draggable {
+  z-index: 100;
+}

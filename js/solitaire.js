@@ -10,10 +10,10 @@ var Solitaire = (function () {
     this.deck = [];
 
     this.houses = {
-      hearts: [],
-      diamonds: [],
-      clubs: [],
-      spades: []
+      first: [],
+      second: [],
+      third: [],
+      fourth: []
     };
 
     this.openedCards = [];
@@ -123,7 +123,7 @@ var Solitaire = (function () {
 
   Solitaire.prototype.openCard = function () {
     if (this.deck.length === 0) {
-      this.deck = this.openedCards.slice();
+      this.deck = this.openedCards.reverse().slice();
       this.openedCards = [];
       this.closeCards(this.deck);
     }
@@ -134,10 +134,88 @@ var Solitaire = (function () {
     }
   }
 
+  Solitaire.prototype.getCard = function (value, suit, home, innerBlock) {
+    var res;
+    if (innerBlock) { //for houses and cells
+      if (this[home][innerBlock].length === 1) {
+        return this[home][innerBlock][0];
+      }
+      for (var i = 0; i < this[home][innerBlock].length; i++) {
+        var card = this[home][innerBlock][i];
+        if (card.value.toString() === value && card.suit === suit) {
+          res = this[home][innerBlock][i];
+        }
+      }
+    }
+    else {
+      res = this[home].filter(function (card) {
+        return card.value.toString() === value && card.suit === suit;
+      })[0];
+    }
+
+    return res;
+  }
+
   Solitaire.prototype.closeCards = function (cards) {
     cards.forEach(function (card) {
       card.isOpen = false;
     });
+  }
+
+  Solitaire.prototype._isHigher = function (card, currentHouse) {
+    var cardIndex = CARD_VALUES.indexOf(card.value);
+    var houseEntryIndex = CARD_VALUES.indexOf(currentHouse[currentHouse.length -1].value);
+    return houseEntryIndex - cardIndex === 1 ? true : false;
+  }
+
+  Solitaire.prototype.isPushableToHouse = function (card, house) {
+    var currentHouse = this.houses[house];
+    if (currentHouse.length === 0 && card.value === "Ace") {
+      return true;
+    }
+    else if (this._isHigher(card, currentHouse) &&
+      card.suit === currentHouse[currentHouse.length - 1].suit) {
+
+      return true;
+    }
+
+    return false;
+  }
+
+  Solitaire.prototype.pushToHouse = function (card, house) {
+    this.houses[house].push(card);
+  }
+
+  Solitaire.prototype.isPushableToColumn = function (card, column) {
+    var currentColumn = this.cells[column];
+    if (currentColumn.length === 0 && card.value === "King") {
+      return true;
+    }
+    if (this._isHigher(card, currentColumn) &&
+      card.color !== currentColumn[currentColumn.length - 1].color) {
+
+      return true;
+    }
+
+    return false;
+  }
+
+  Solitaire.prototype.pushToColumn = function (card, column) {
+    this.cells[column].push(card);
+  }
+
+  Solitaire.prototype.removeCardFromPrevPos = function (card, cardHome, innerBlock) {
+    var cardIndex;
+    if (innerBlock) {
+      cardIndex = this[cardHome][innerBlock].indexOf(card);
+      this[cardHome][innerBlock].splice(cardIndex, 1);
+      this[cardHome][innerBlock].isOpen = true;
+    }
+    else {
+      cardIndex = this[cardHome].indexOf(card);
+      this[cardHome].splice(cardIndex, 1);
+      this[cardHome].isOpen = true;
+    }
   }
 
   return Solitaire;

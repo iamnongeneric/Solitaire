@@ -36,6 +36,8 @@ var Table = (function () {
   }
 
   Table.prototype._onOpenCardDrag = function () {
+    event.preventDefault();
+    var self = this;
     var card = event.target.closest('[data-selector="open_card"]');
     var tableElement = this._el;
 
@@ -45,7 +47,6 @@ var Table = (function () {
 
     card.classList.add('draggable');
     tableElement.appendChild(card);
-    event.preventDefault();
     moveCard(event);
 
     function moveCard(e) {
@@ -54,6 +55,16 @@ var Table = (function () {
     }
 
     function onMouseUp(e) {
+      console.log(card.dataset);
+      card.classList.add('hidden');
+      var dropZone = document.elementFromPoint(e.clientX, e.clientY);
+      card.classList.remove('hidden');
+
+      if (dropZone === null || !dropZone.classList.contains('js-droppable')) {
+        tableElement.removeChild(card);
+        self._cellsContainer.render();
+        self._openedCardsContainer.render();
+      }
 
       tableElement.removeEventListener('mousemove', moveCard);
       card.removeEventListener('mouseup', onMouseUp);

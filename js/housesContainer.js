@@ -4,7 +4,7 @@ var HousesContainer = (function () {
     this._solitaire = options.solitaire;
     this._template = document.getElementById('houses_template').innerHTML;
 
-    this.render();  
+    this.render();
   }
 
   HousesContainer.prototype.render = function () {

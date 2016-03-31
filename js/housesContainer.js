@@ -3,6 +3,8 @@ var HousesContainer = (function () {
     this._el = options.element;
     this._solitaire = options.solitaire;
     this._template = document.getElementById('houses_template').innerHTML;
+
+    this.render();  
   }
 
   HousesContainer.prototype.render = function () {

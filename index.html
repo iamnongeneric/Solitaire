@@ -33,16 +33,23 @@
 
   <script type="text/template" id="opened_cards_template">
     <% cards.forEach(function (card) { %>
-      <div class="card" data-selector="open_card"><img src="<%= card.image %>"></div>
+      <div class="card"
+      data-suit="<%= card.suit %>"
+      data-value="<%= card.value %>"
+      data-selector="open_card">
+      <img src="<%= card.image %>"></div>
     <% }); %>
   </script>
 
   <script type="text/template" id="cells_template">
     <% for (var cell in cells) { %>
-      <div class="column">
+      <div class="column js-droppable" data-selector="column" data-name="<%= cell %>">
         <% cells[cell].forEach(function (item) { %>
           <% if (item.isOpen === true) { %>
-            <div class="card" data-selector="open_card"><img src="<%= item.image %>"></div>
+            <div class="card js-droppable" data-selector="open_card"
+            data-suit="<%= item.suit %>"
+            data-value="<%= item.value %>"><img src="<%= item.image %>"
+            class="js-droppable"></div>
           <% } %>
           <% if (item.isOpen === false) { %>
             <div class="card closed"></div>
@@ -54,12 +61,12 @@
 
   <script type="text/template" id="houses_template">
     <% for (var house in houses) { %>
-      <div class="house">
-        <% houses[house].forEach(function (card)) { %>
+      <div class="house js-droppable" data-selector="house" data-name="<%= house %>">
+        <% houses[house].forEach(function (card) { %>
           <div class="card" data-selector="open_card"
-          data-card-suit="<%= card.suit %>"
-          data-card-value="<%= card.value %>"></div>
-        <% } %>
+            data-suit="<%= card.suit %>"
+            data-value="<%= card.value %>"></div>
+        <% }); %>
       </div>
     <% } %>
   </script>

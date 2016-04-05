@@ -85,6 +85,11 @@ var Table = (function () {
     }
 
     function onMouseUp(e) {
+      if (!cardHomeName) {
+        refresh();
+        tableElement.removeChild(dragDiv);
+        return;
+      }
       var cards = dragDiv.childNodes;
       var cardValue = dragDiv.firstChild.dataset.value;
       var cardSuit = dragDiv.firstChild.dataset.suit;
@@ -110,9 +115,6 @@ var Table = (function () {
         if (solitaire.isPushableToHouse(cardObj, realDropZone.dataset.name)) {
           var card = cards[0];
           solitaire.pushToHouse(cardObj, realDropZone.dataset.name);
-          // realDropZone.appendChild(card);
-          // card.style.left = realDropZone.style.left;
-          // card.style.top = realDropZone.style.top;
           solitaire.removeCardFromPrevPos(cardObj, cardHomeName, innerBlock);
         }
       }
@@ -142,6 +144,11 @@ var Table = (function () {
       tableElement.removeChild(dragDiv);
       tableElement.removeEventListener('mousemove', moveDraggable);
       dragDiv.removeEventListener('mouseup', onMouseUp);
+
+      if (solitaire.checkIfWin()) {
+        tableElement.classList.add('hidden');
+        document.getElementById('win_wrapper').classList.remove('hidden');
+      }
     }
 
     tableElement.addEventListener('mousemove', moveDraggable);

@@ -234,5 +234,15 @@ var Solitaire = (function () {
     }
   }
 
+  Solitaire.prototype.checkIfWin = function () {
+    for (var house in this.houses) {
+      if (house.length < CARD_VALUES.length) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
   return Solitaire;
 })();

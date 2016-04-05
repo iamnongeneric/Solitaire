@@ -1,0 +1,127 @@
+* {
+  margin: 0 auto;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  background: #27ae60;
+}
+
+.table_view {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.deck_view, .opened_cards_view {
+  position: relative;
+  display: inline-block;
+  width: 100px;
+  height: 145px;
+  top: 10px;
+}
+
+.deck_view {
+  margin-left: 10px;
+}
+
+.opened_cards_view {
+  margin-left: 10px;
+}
+
+.cells_view {
+  position: absolute;
+  display: inline-block;
+  float: left;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  top: 39%;
+  left: 0;
+}
+
+.card {
+  width: 100px;
+  height: 145px;
+  position: absolute;
+}
+
+.card > img {
+  width: 100px;
+  height: 145px;
+}
+
+.closed {
+  background: url(img/back.png);
+  background-size: 100px 145px;
+}
+
+.column {
+  width: 100px;
+  height: 100%;
+  border-top: 2px solid #bdc3c7;
+  display: inline-block;
+  position: relative;
+}
+
+.column > * {
+  float: left;
+  position: relative;
+}
+
+.column > .card:not(:first-child) {
+  margin-top: -125px;
+}
+
+.draggable {
+  z-index: 100;
+}
+
+.houses_view {
+  float: right;
+  margin-top: 10px;
+  margin-right: 10px;
+}
+
+.house {
+  border: 2px solid #bdc3c7;
+  display: inline-block;
+  width: 100px;
+  height: 145px;
+}
+
+.hidden {
+  display: none;
+}
+
+.draggable {
+  position: absolute;
+  width: 145px;
+  height: 100px;
+}
+
+.draggable > * {
+  position: static;
+  margin-top: -125px;
+}
+
+.win_wrapper {
+  width: 100%;
+  height: 100%;
+}
+
+.win {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -50px;
+  margin-left: -50px;
+  width: 100px;
+  height: 100px;
+  text-align: center;
+}

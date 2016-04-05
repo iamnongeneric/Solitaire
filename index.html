@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Solitaire</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.6.1/lodash.min.js" defer></script>
+    <script src="js/solitaire.js" defer></script>
+    <script src="js/deckContainer.js" defer></script>
+    <script src="js/openedCardsContainer.js" defer></script>
+    <script src="js/cellsContainer.js" defer></script>
+    <script src="js/housesContainer.js" defer></script>
+    <script src="js/table.js" defer></script>
+    <script src="js/app.js" defer></script>
+  </head>
+  <body>
+
+    <div class="table_view" data-component="table">
+
+      <div class="deck_view" data-component="deckContainer"></div>
+      <div class="opened_cards_view" data-component="openedCardsContainer"></div>
+      <div class="houses_view" data-component="housesContainer"></div>
+      <div class="cells_view" data-component="cellsContainer"></div>
+
+    </div>
+
+    <div id="win_wrapper" class="win_wrapper hidden">
+      <div class="win"><h1>WIN!</h1></div>
+    </div>
+
+
+  <script type="text/template" id="deck_template">
+    <% deckCards.forEach(function (card) { %>
+      <div class="card closed"></div>
+    <% }); %>
+  </script>
+
+  <script type="text/template" id="opened_cards_template">
+    <% cards.forEach(function (card) { %>
+      <div class="card"
+      data-suit="<%= card.suit %>"
+      data-value="<%= card.value %>"
+      data-selector="open_card">
+      <img src="<%= card.image %>"></div>
+    <% }); %>
+  </script>
+
+  <script type="text/template" id="cells_template">
+    <% for (var cell in cells) { %>
+      <div class="column js-droppable" data-selector="column" data-name="<%= cell %>">
+        <% cells[cell].forEach(function (item) { %>
+          <% if (item.isOpen === true) { %>
+            <div class="card" data-selector="open_card"
+            data-suit="<%= item.suit %>"
+            data-value="<%= item.value %>"><img src="<%= item.image %>"></div>
+          <% } %>
+          <% if (item.isOpen === false) { %>
+            <div class="card closed"></div>
+          <% } %>
+        <% }); %>
+      </div>
+    <% } %>
+  </script>
+
+  <script type="text/template" id="houses_template">
+    <% for (var house in houses) { %>
+      <div class="house js-droppable" data-selector="house" data-name="<%= house %>">
+        <% houses[house].forEach(function (card) { %>
+          <div class="card" data-selector="open_card"
+            data-suit="<%= card.suit %>"
+            data-value="<%= card.value %>"><img src="<%= card.image %>"></div>
+        <% }); %>
+      </div>
+    <% } %>
+  </script>
+  </body>
+</html>

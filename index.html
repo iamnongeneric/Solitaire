@@ -46,10 +46,9 @@
       <div class="column js-droppable" data-selector="column" data-name="<%= cell %>">
         <% cells[cell].forEach(function (item) { %>
           <% if (item.isOpen === true) { %>
-            <div class="card js-droppable" data-selector="open_card"
+            <div class="card" data-selector="open_card"
             data-suit="<%= item.suit %>"
-            data-value="<%= item.value %>"><img src="<%= item.image %>"
-            class="js-droppable"></div>
+            data-value="<%= item.value %>"><img src="<%= item.image %>"></div>
           <% } %>
           <% if (item.isOpen === false) { %>
             <div class="card closed"></div>
@@ -65,7 +64,7 @@
         <% houses[house].forEach(function (card) { %>
           <div class="card" data-selector="open_card"
             data-suit="<%= card.suit %>"
-            data-value="<%= card.value %>"></div>
+            data-value="<%= card.value %>"><img src="<%= card.image %>"></div>
         <% }); %>
       </div>
     <% } %>

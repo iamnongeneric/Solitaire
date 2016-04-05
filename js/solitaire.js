@@ -235,8 +235,8 @@ var Solitaire = (function () {
   }
 
   Solitaire.prototype.checkIfWin = function () {
-    for (var house in this.houses) {
-      if (house.length < CARD_VALUES.length) {
+    for (var column in this.cells) {
+      if (this.cells[column].length !== 0) {
         return false;
       }
     }

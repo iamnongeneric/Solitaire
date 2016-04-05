@@ -162,18 +162,26 @@ var Solitaire = (function () {
     });
   }
 
-  Solitaire.prototype._isHigher = function (card, currentHouse) {
+  Solitaire.prototype._isHigher = function (card, currentHouse, houseName) {
     var cardIndex = CARD_VALUES.indexOf(card.value);
     var houseEntryIndex = CARD_VALUES.indexOf(currentHouse[currentHouse.length -1].value);
-    return houseEntryIndex - cardIndex === 1 ? true : false;
+    if (houseName !== "house") {
+      return houseEntryIndex - cardIndex === 1 ? true : false;
+    }
+    else {
+      return cardIndex - houseEntryIndex === 1 ? true : false;
+    }
   }
 
   Solitaire.prototype.isPushableToHouse = function (card, house) {
     var currentHouse = this.houses[house];
-    if (currentHouse.length === 0 && card.value === "Ace") {
-      return true;
+    if (currentHouse.length === 0) {
+      if (card.value === "Ace") {
+        return true;
+      }
+      return false;
     }
-    else if (this._isHigher(card, currentHouse) &&
+    else if (this._isHigher(card, currentHouse, "house") &&
       card.suit === currentHouse[currentHouse.length - 1].suit) {
 
       return true;
@@ -191,7 +199,7 @@ var Solitaire = (function () {
     if (currentColumn.length === 0 && card.value === "King") {
       return true;
     }
-    if (this._isHigher(card, currentColumn) &&
+    if (this._isHigher(card, currentColumn, "column") &&
       card.color !== currentColumn[currentColumn.length - 1].color) {
 
       return true;
@@ -200,8 +208,13 @@ var Solitaire = (function () {
     return false;
   }
 
-  Solitaire.prototype.pushToColumn = function (card, column) {
-    this.cells[column].push(card);
+  Solitaire.prototype.pushToColumn = function (cards, column) {
+    //this.cells[column].push(card);
+    var tempCells = this.cells[column].slice();
+    cards.forEach(function (card) {
+      tempCells.push(card);
+    });
+    this.cells[column] = tempCells.slice();
   }
 
   Solitaire.prototype.removeCardFromPrevPos = function (card, cardHome, innerBlock) {
@@ -209,7 +222,10 @@ var Solitaire = (function () {
     if (innerBlock) {
       cardIndex = this[cardHome][innerBlock].indexOf(card);
       this[cardHome][innerBlock].splice(cardIndex, 1);
-      this[cardHome][innerBlock].isOpen = true;
+      if (this[cardHome][innerBlock].length !== 0) {
+        var last = this[cardHome][innerBlock].length - 1;
+        this[cardHome][innerBlock][last].isOpen = true;
+      }
     }
     else {
       cardIndex = this[cardHome].indexOf(card);

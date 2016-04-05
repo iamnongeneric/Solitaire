@@ -94,3 +94,14 @@ html, body {
 .hidden {
   display: none;
 }
+
+.draggable {
+  position: absolute;
+  width: 145px;
+  height: 100px;
+}
+
+.draggable > * {
+  position: static;
+  margin-top: -125px;
+}

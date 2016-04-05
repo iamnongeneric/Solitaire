@@ -55,9 +55,6 @@ var Table = (function () {
     }
 
     cardHome = card.parentNode; //save the card previous location
-    if (cardHome === "table_view") {
-      return;
-    }
     if (cardHome.dataset.selector === "house") {
       cardHomeName = "houses";
       innerBlock = cardHome.dataset.name;
@@ -70,71 +67,85 @@ var Table = (function () {
       cardHomeName = "openedCards";
     }
 
-    card.classList.add('draggable');
-    tableElement.appendChild(card);
-    moveCard(event);
+    var dragDiv = document.createElement('div');
+    dragDiv.classList.add('draggable');
+    tableElement.appendChild(dragDiv);
+    var cardHomeCards = cardHome.childNodes;
+    var startFrom =  Array.prototype.slice.call(cardHomeCards).indexOf(card);
+    console.log(cardHomeCards);
+    for (var i = startFrom; i < cardHomeCards.length; i++) {
+      dragDiv.appendChild(cardHomeCards[i]);
+    }
 
-    function moveCard(e) {
-      card.style.left = e.pageX - card.offsetWidth / 2 + 'px';
-      card.style.top = e.pageY - card.offsetHeight / 2 + 'px';
+    moveDraggable(event);
+
+    function moveDraggable(e) {
+      dragDiv.style.left = e.pageX - dragDiv.offsetWidth / 2 + 'px';
+      dragDiv.style.top = e.pageY + 125 - dragDiv.offsetHeight / 2 + 'px';
     }
 
     function onMouseUp(e) {
-      var cardValue = card.dataset.value;
-      var cardSuit = card.dataset.suit;
-      var cardObj = solitaire.getCard(cardValue, cardSuit,
-                                      cardHomeName, innerBlock);
-      card.classList.add('hidden');
-      var dropZone = document.elementFromPoint(e.clientX, e.clientY);
-      card.classList.remove('hidden');
+      var cards = dragDiv.childNodes;
+      var cardValue = dragDiv.firstChild.dataset.value;
+      var cardSuit = dragDiv.firstChild.dataset.suit;
+      var cardObj = solitaire.getCard(cardValue, cardSuit, cardHomeName, innerBlock);
+      var dropZone;
+      dragDiv.classList.add('hidden');
+      dropZone = document.elementFromPoint(e.clientX, e.clientY);
+      dragDiv.classList.remove('hidden');
 
-      if (dropZone === null || !dropZone.classList.contains('js-droppable')) {
-        tableElement.removeChild(card);
+      if (dropZone === null) {
+        tableElement.removeChild(dragDiv);
         refresh();
+        return;
       }
 
-      else if (dropZone.dataset.selector === "house") {
-        if (solitaire.isPushableToHouse(cardObj, dropZone.dataset.name)) {
-          solitaire.pushToHouse(cardObj, dropZone.dataset.name);
-          console.log(solitaire.houses);
-          card.classList.add('js-droppable');
-          dropZone.appendChild(card);
-          card.style.left = dropZone.style.left;
-          card.style.top = dropZone.style.top;
-        }
-        else {
+      else if (dropZone.closest('[data-selector="house"]')) {
+        var realDropZone = dropZone.closest('[data-selector="house"]');
+        if (cards.length > 1) {
+          tableElement.removeChild(dragDiv);
           refresh();
+          return;
         }
-        solitaire.removeCardFromPrevPos(cardObj, cardHomeName, innerBlock);
+        if (solitaire.isPushableToHouse(cardObj, realDropZone.dataset.name)) {
+          var card = cards[0];
+          solitaire.pushToHouse(cardObj, realDropZone.dataset.name);
+          // realDropZone.appendChild(card);
+          // card.style.left = realDropZone.style.left;
+          // card.style.top = realDropZone.style.top;
+          solitaire.removeCardFromPrevPos(cardObj, cardHomeName, innerBlock);
+        }
       }
 
       else if (dropZone.closest('[data-selector="column"]')) {
         var realDropZone = dropZone.closest('[data-selector="column"]');
-
+        var card = cards[0];
+        var cardValue = card.dataset.value;
+        var cardSuit = card.dataset.suit;
+        var cardObj = solitaire.getCard(cardValue, cardSuit, cardHomeName, innerBlock);
+        var cardsToPush = [];
         if (solitaire.isPushableToColumn(cardObj, realDropZone.dataset.name)) {
-          solitaire.pushToColumn(cardObj, realDropZone.dataset.name);
-          realDropZone.appendChild(card);
-          card.style.left = realDropZone.style.left;
-          card.style.top = realDropZone.style.top;
+          for (var i = 0; i < cards.length; i++) {
+            card = cards[i];
+            cardValue = card.dataset.value;
+            cardSuit = card.dataset.suit;
+            cardObj = solitaire.getCard(cardValue, cardSuit, cardHomeName, innerBlock);
+            cardsToPush.push(cardObj);
+          }
         }
-        else {
-          refresh();
-          tableElement.removeChild(card);
-        }
-        solitaire.removeCardFromPrevPos(cardObj, cardHomeName, innerBlock);
+        solitaire.pushToColumn(cardsToPush, realDropZone.dataset.name);
+        cardsToPush.forEach(function (card) {
+          solitaire.removeCardFromPrevPos(card, cardHomeName, innerBlock);
+        });
       }
-
-      else {
-        refresh();
-        tableElement.removeChild(card);
-      }
-
-      tableElement.removeEventListener('mousemove', moveCard);
-      card.removeEventListener('mouseup', onMouseUp);
+      refresh();
+      tableElement.removeChild(dragDiv);
+      tableElement.removeEventListener('mousemove', moveDraggable);
+      dragDiv.removeEventListener('mouseup', onMouseUp);
     }
-    console.log(this._solitaire.houses);
-    tableElement.addEventListener('mousemove', moveCard);
-    card.addEventListener('mouseup', onMouseUp);
+
+    tableElement.addEventListener('mousemove', moveDraggable);
+    dragDiv.addEventListener('mouseup', onMouseUp);
   }
 
   return Table;
